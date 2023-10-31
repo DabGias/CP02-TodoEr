@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Home } from './src/screens/Home'
 import { UserForm } from './src/screens/UserForm'
 import { Main } from './src/screens/Main'
+import { TaskForm } from './src/screens/TaskForm'
 
 const Stack = createStackNavigator()
 
@@ -29,6 +30,11 @@ export default function App() {
 			<Stack.Screen
 				name='Main'
 				component={Main}
+				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name='TaskForm'
+				component={TaskForm}
 				options={{ headerShown: false }}
 			/>
 		</Stack.Navigator>

@@ -1,81 +1,73 @@
 import { useState } from "react"
-import { SafeAreaView, Text, View, Pressable } from "react-native"
+import { SafeAreaView, View, Pressable, Text } from "react-native"
 import { formStyle } from "../styles/FormStyle"
 import { CustomInput } from "../components/CustomInput"
-import { login } from "../../firebaseConfig"
+import { getUser, insert } from "../../firebaseConfig"
 
-export function UserForm({ navigation }) {
-    const [user, setUser] = useState({
-        email: "",
-        password: ""
+export function TaskForm({ navigation }) {
+    const [task, setTask] = useState({
+        title: "",
+        description: "",
+        user_email: getUser()["email"]
     })
 
     function setField(field, value) {
-        setUser({ ...user, [field]: value })
+        setTask({ ...task, [field]: value })
     }
 
-    function verifEmail() {
-        return /\S+@\S+\.\S+/.test(user["email"].trim())
+    function verifTitle() {
+        return task["title"].trim() !== ""
     }
 
-    function verifPassword() {
-        return user["password"].length >= 8
+    function verifDescription() {
+        return task["description"].trim() !== ""
     }
 
     function validate() {
-        if (verifEmail() && verifPassword()) {
+        if (verifTitle() && verifDescription()) {
             return true
         } else {
             return false
         }
     }
-
-    async function submit(userData) {
-        await login(userData)
-    }
-
+    
     return(
         <SafeAreaView style={formStyle.container}>
-            <Text style={formStyle.title}>Preencha os campos com os dados requisitados</Text>
-            <Text style={formStyle.subtitle}>Não se preocupe! Se não tiver um cadastro apenas preencha os campos com os dados de sua preferência. Seu cadastro será criado automaticamente!</Text>
+            <Text style={formStyle.title}>Informe os dados da nova tarefa</Text>
 
             <CustomInput
                 style={
-                    user["email"].length > 0 ?
-                        verifEmail() ?
+                    task["title"].length > 0 ?
+                        verifTitle() ?
                             formStyle.inputSuccess
                         :
                             formStyle.inputError
                     :
                         null
                 }
-                value={user["email"]}
-                placeholder={"Email"}
-                onChangeText={(value) => { setField("email", value) }}
+                value={task["title"]}
+                placeholder={"Título"}
+                onChangeText={(value) => { setField("title", value) }}
                 onEndEditing={validate}
-                keyboardType={"email-address"}
-                inputMode={"email"}
-                autoCapitalize={"none"}
+            />
+
+            <CustomInput
+                style={
+                    task["description"].length > 0 ?
+                        verifDescription() ?
+                            formStyle.inputSuccess
+                        :
+                            formStyle.inputError
+                    :
+                        null
+                }
+                value={task["description"]}
+                placeholder={"Descrição"}
+                onChangeText={(value) => { setField("description", value) }}
+                onEndEditing={validate}
+                multiline={true}
             />
             
-            <CustomInput
-                style={
-                    user["password"].length > 0 ?
-                        verifPassword() ?
-                            formStyle.inputSuccess
-                        :
-                            formStyle.inputError
-                    :
-                        null
-                }
-                value={user["password"]}
-                placeholder={"Senha"}
-                onChangeText={(value) => { setField("password", value) }}
-                onEndEditing={validate}
-                secureTextEntry={true}
-                autoCapitalize={"none"}
-            />
-
             <View style={formStyle.buttonView}>
                 <Pressable 
                     style={
@@ -86,7 +78,7 @@ export function UserForm({ navigation }) {
                     }
                     disabled={!validate()}
                     onPress={async () => { 
-                        await submit(user)
+                        await insert(task)
                         navigation.navigate("Main")
                     }}
                 >
@@ -104,7 +96,7 @@ export function UserForm({ navigation }) {
 
                 <Pressable 
                     style={formStyle.cancelButton}
-                    onPress={() => { navigation.navigate("Home") }}    
+                    onPress={() => { navigation.navigate("Main") }}    
                 >
                     <Text style={formStyle.cancelButtonText}>Cancelar</Text>
                 </Pressable>

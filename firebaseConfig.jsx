@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth"
-import { useState } from "react"
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { addDoc, collection, getDocs, getFirestore, query, where } from "firebase/firestore"
 
 const firebaseConfig = {
     apiKey: "AIzaSyAECNngNrYTyyo-pCN0XR-6ZHyyM2S3DNU",
@@ -12,6 +12,7 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
+
 const auth = getAuth(app)
 
 export async function login(user) {
@@ -40,4 +41,28 @@ async function register(user) {
 
 export function getUser() {
     return auth["currentUser"]
+}
+
+
+const db = getFirestore(app)
+
+export async function insert(data) {
+    await addDoc(collection(db, "tasks"), data)
+    .catch((error) => {
+        console.debug(error)
+    })
+}
+
+export async function select() {
+    const snapshot = await getDocs(query(
+        collection(db, "tasks"), 
+        where("user_email", "==", auth["currentUser"]["email"])
+    ))
+    const tasks = []
+
+    snapshot.forEach((doc) => {
+        tasks.push(doc)
+    })
+
+    return tasks
 }
