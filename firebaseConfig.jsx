@@ -51,9 +51,9 @@ const db = getFirestore(app)
 
 export async function insert(data) {
     await addDoc(collection(db, "tasks"), data)
-    .catch((error) => {
-        console.debug(error)
-    })
+        .catch((error) => {
+            console.debug(error)
+        })
 }
 
 export async function select() {
@@ -72,7 +72,7 @@ export async function select() {
 
 export async function remove(taskId) {
     await deleteDoc(doc(db, "tasks", taskId))
-    .catch((error) => {
-        console.debug(error)
-    })
+        .catch((error) => {
+            console.debug(error)
+        })
 }
