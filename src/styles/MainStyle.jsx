@@ -15,9 +15,11 @@ export const mainStyle = StyleSheet.create({
         marginVertical: 10,
         marginLeft: "auto",
         marginRight: "auto",
-        padding: 15,
+        paddingVertical: 5,
+        paddingLeft: 10,
+        paddingRight: 15,
         borderLeftWidth: 5,
-        borderColor: "#248ad8"
+        borderColor: "#248ad8",
     },
 
     taskTitle: {
@@ -29,11 +31,32 @@ export const mainStyle = StyleSheet.create({
         fontSize: 15
     },
 
+    taskActionsView: {
+        marginTop: 20
+    },
+
+    deleteTaskButton: {
+        width: "60%",
+        paddingVertical: 10,
+        marginLeft: "auto",
+        marginRight: "auto",
+        borderColor: "#ff5c5c",
+        borderStyle: "solid",
+        borderWidth: 2,
+        borderRadius: 10
+    },
+
+    deleteTaskButtonText: {
+        color: "#ff5c5c",
+        textAlign: "center",
+        fontWeight: "bold"
+    },
+
     button: {
         backgroundColor: "#4BB543",
         borderRadius: 10,
         width: "80%",
-        marginTop: 15,
+        marginVertical: 15,
         marginLeft: "auto",
         marginRight: "auto",
         paddingVertical: 10,

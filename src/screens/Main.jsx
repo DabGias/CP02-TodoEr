@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react"
 import { Pressable, FlatList, View, Text, SafeAreaView } from "react-native"
 import { mainStyle } from "../styles/MainStyle"
-import { select } from "../../firebaseConfig"
+import { remove, select } from "../../firebaseConfig"
 
-function TaskCard({ title, description }) {
+function TaskCard({ id, title, description }) {
     return(
         <View style={mainStyle.taskCard}>
             <Text style={mainStyle.taskTitle}>{title}</Text>
             <Text style={mainStyle.taskDesc}>{description}</Text>
+            <View style={mainStyle.taskActionsView}>
+                <Pressable 
+                    style={mainStyle.deleteTaskButton}
+                    onPress={async () => {
+                        await remove(id)
+                    }}
+                >
+                    <Text style={mainStyle.deleteTaskButtonText}>Deletar tarefa</Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -34,7 +44,7 @@ export function Main({ navigation }) {
                     <FlatList
                         data={tasks}
                         keyExtractor={task => task["id"]}
-                        renderItem={({ item }) => <TaskCard key={item["id"]} {...item.data()}/>}
+                        renderItem={({ item }) => <TaskCard key={item["id"]} id={item["id"]} {...item.data()}/>}
                     />
             }
             <Pressable 

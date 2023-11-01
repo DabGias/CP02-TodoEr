@@ -30,10 +30,6 @@ export function UserForm({ navigation }) {
         }
     }
 
-    async function submit(userData) {
-        await login(userData)
-    }
-
     return(
         <SafeAreaView style={formStyle.container}>
             <Text style={formStyle.title}>Preencha os campos com os dados requisitados</Text>
@@ -86,7 +82,7 @@ export function UserForm({ navigation }) {
                     }
                     disabled={!validate()}
                     onPress={async () => { 
-                        await submit(user)
+                        await login(user)
                         navigation.navigate("Main")
                     }}
                 >

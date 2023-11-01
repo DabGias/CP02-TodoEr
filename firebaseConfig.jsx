@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app"
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { addDoc, collection, getDocs, getFirestore, query, where } from "firebase/firestore"
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, getReactNativePersistence, initializeAuth } from "firebase/auth"
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, where } from "firebase/firestore"
+
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage'
 
 const firebaseConfig = {
     apiKey: "AIzaSyAECNngNrYTyyo-pCN0XR-6ZHyyM2S3DNU",
@@ -13,7 +15,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 
-const auth = getAuth(app)
+const auth = initializeAuth(app, { 
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage) 
+})
 
 export async function login(user) {
     await signInWithEmailAndPassword(auth, user["email"], user["password"])
@@ -65,4 +69,11 @@ export async function select() {
     })
 
     return tasks
+}
+
+export async function remove(taskId) {
+    await deleteDoc(doc(db, "tasks", taskId))
+    .catch((error) => {
+        console.debug(error)
+    })
 }
